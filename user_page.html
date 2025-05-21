@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Send a message to {{ username }} - Sndr{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4>Send a message to {{ username }}</h4>
+            </div>
+            <div class="card-body">
+                <p class="card-text">This message will be sent anonymously. {{ username }} will never know who sent it.</p>
+                <form action="/send" method="post">
+                    <input type="hidden" name="username" value="{{ username }}">
+                    <div class="mb-3">
+                        <label for="message" class="form-label">Your Anonymous Message</label>
+                        <textarea class="form-control" id="message" name="message" rows="4" placeholder="Write your message here..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-8 offset-md-2">
+        <div class="card">
+            <div class="card-header">
+                <h5>Share this page</h5>
+            </div>
+            <div class="card-body">
+                <p>Share this link with others so they can send messages to {{ username }}:</p>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" value="{{ request.url }}" id="shareLink" readonly>
+                    <button class="btn btn-outline-secondary" type="button" onclick="copyShareLink()">Copy</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function copyShareLink() {
+    var copyText = document.getElementById("shareLink");
+    copyText.select();
+    copyText.setSelectionRange(0, 99999);
+    document.execCommand("copy");
+    alert("Link copied to clipboard!");
+}
+</script>
+{% endblock %} 

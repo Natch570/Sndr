@@ -1,0 +1,74 @@
+{
+  "name": "Sndr - Anonymous Messaging",
+  "short_name": "Sndr",
+  "description": "Send and receive anonymous messages to anyone",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ff69b4",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/static/img/icon-72x72.png",
+      "type": "image/png",
+      "sizes": "72x72"
+    },
+    {
+      "src": "/static/img/icon-96x96.png",
+      "type": "image/png",
+      "sizes": "96x96"
+    },
+    {
+      "src": "/static/img/icon-128x128.png",
+      "type": "image/png",
+      "sizes": "128x128"
+    },
+    {
+      "src": "/static/img/icon-144x144.png",
+      "type": "image/png",
+      "sizes": "144x144"
+    },
+    {
+      "src": "/static/img/icon-152x152.png",
+      "type": "image/png",
+      "sizes": "152x152"
+    },
+    {
+      "src": "/static/img/icon-192x192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/static/img/icon-384x384.png",
+      "type": "image/png",
+      "sizes": "384x384"
+    },
+    {
+      "src": "/static/img/icon-512x512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    },
+    {
+      "src": "/static/img/maskable-icon.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "View Inbox",
+      "short_name": "Inbox",
+      "description": "View your anonymous messages",
+      "url": "/inbox",
+      "icons": [{ "src": "/static/img/inbox-icon.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "My Profile",
+      "short_name": "Profile",
+      "description": "View your profile page",
+      "url": "/profile",
+      "icons": [{ "src": "/static/img/profile-icon.png", "sizes": "192x192" }]
+    }
+  ]
+} 

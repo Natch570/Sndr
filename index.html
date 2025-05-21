@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block title %}Welcome to Sndr - Send Anonymous Messages{% endblock %}
+
+{% block content %}
+<div class="hero-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="display-4 mb-4">Send Anonymous Messages to Anyone</h1>
+                <p class="lead mb-4">Express yourself without revealing your identity. Share thoughts, feedback, or rants anonymously with friends, colleagues, or anyone!</p>
+                <div class="cta-buttons">
+                    <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg me-3">
+                        <i class="fas fa-user-plus me-2"></i>Get Started
+                    </a>
+                    <a href="#how-it-works" class="btn btn-outline-primary btn-lg">
+                        <i class="fas fa-info-circle me-2"></i>Learn More
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center">
+                <div class="hero-envelope mx-auto" style="max-width: 300px;">
+                    <div class="envelope">
+                        <div class="envelope-front">
+                            <div class="envelope-flap"></div>
+                            <div class="envelope-content">
+                                <i class="fas fa-envelope-open-text fa-3x mb-3"></i>
+                                <p class="message-preview">Send anonymous messages</p>
+                            </div>
+                        </div>
+                        <div class="envelope-back">
+                            <div class="message-content">
+                                <p class="lead">Share your thoughts anonymously...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section id="how-it-works" class="features-section py-5">
+    <div class="container">
+        <h2 class="text-center mb-5">How It Works</h2>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-user-plus"></i>
+                    </div>
+                    <h3>Create Your Profile</h3>
+                    <p>Sign up and get your unique profile link to share with others.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-share-alt"></i>
+                    </div>
+                    <h3>Share Your Link</h3>
+                    <p>Share your profile link with friends or post it on social media.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <h3>Receive Messages</h3>
+                    <p>Get anonymous messages from anyone in your inbox.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="cta-section py-5">
+    <div class="container text-center">
+        <h2 class="mb-4">Ready to Start Receiving Messages?</h2>
+        <p class="lead mb-4">Create your profile now and share it with your friends!</p>
+        <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg">
+            <i class="fas fa-envelope me-2"></i>Get Started Now
+        </a>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Toggle envelope on click
+    const envelope = document.querySelector('.envelope');
+    envelope.addEventListener('click', function() {
+        this.classList.toggle('open');
+    });
+});
+</script>
+{% endblock %} 

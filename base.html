@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sndr - Send anonymous messages to friends and anyone">
+    <meta name="theme-color" content="#ff69b4">
+    <title>{% block title %}Sndr - Anonymous Messages{% endblock %}</title>
+    
+    <!-- PWA Support -->
+    <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Sndr">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='img/icon-152x152.png') }}">
+    <meta name="msapplication-TileImage" content="{{ url_for('static', filename='img/icon-144x144.png') }}">
+    <meta name="msapplication-TileColor" content="#ff69b4">
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        body {
+            padding-top: 60px;
+            background-color: #f8f9fa;
+        }
+        .message-card {
+            margin-bottom: 15px;
+        }
+        .hero-section {
+            background-color: #6c5ce7;
+            padding: 100px 0;
+            color: white;
+        }
+        .notification-permission {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 15px;
+            z-index: 1000;
+            max-width: 300px;
+        }
+        /* PWA Install Prompt - Hidden for UptoDown version */
+        #pwa-install-prompt {
+            display: none;
+        }
+        @media (display-mode: standalone) {
+            /* Adjustments for when running as installed PWA */
+            body {
+                padding-top: 10px;
+            }
+            .navbar {
+                border-radius: 10px;
+                margin: 0 10px 15px;
+                width: calc(100% - 20px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-pink shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="{{ url_for('index') }}">
+                <i class="fas fa-heart me-1"></i> Sndr
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'index' %}active{% endif %}" href="{{ url_for('index') }}">
+                            <i class="fas fa-home me-1"></i>Home
+                        </a>
+                    </li>
+                    {% if current_user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'profile' and request.view_args and request.view_args.username == current_user.username %}active{% endif %}" href="{{ url_for('profile', username=current_user.username) }}">
+                            <i class="fas fa-user me-1"></i>My Profile
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <!-- Install button removed for UptoDown Android app version -->
+                    {% if current_user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'inbox' %}active{% endif %}" href="{{ url_for('inbox', username=current_user.username) }}">
+                            <i class="fas fa-inbox me-1"></i>Inbox
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('logout') }}">
+                            <i class="fas fa-sign-out-alt me-1"></i>Logout
+                        </a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'login' %}active{% endif %}" href="{{ url_for('login') }}">
+                            <i class="fas fa-sign-in-alt me-1"></i>Login
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'register' %}active{% endif %}" href="{{ url_for('register') }}">
+                            <i class="fas fa-user-plus me-1"></i>Register
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category if category != 'error' else 'danger' }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+    
+    {% if current_user.is_authenticated %}
+    <div id="notification-permission" class="notification-permission d-none">
+        <h5><i class="fas fa-bell me-2"></i>Enable Notifications</h5>
+        <p class="mb-3">Get notified instantly when you receive new anonymous messages!</p>
+        <button id="request-notification-permission" class="btn btn-primary btn-sm">
+            <i class="fas fa-check-circle me-1"></i> Enable Notifications
+        </button>
+        <button class="btn btn-link btn-sm text-muted" onclick="document.getElementById('notification-permission').classList.add('d-none')">
+            Not now
+        </button>
+    </div>
+    
+    <script>
+        // Set current username for notifications
+        window.currentUsername = "{{ current_user.username }}";
+    </script>
+    {% endif %}
+    
+    <footer>
+        <div class="container">
+            <div class="copyright">
+                <span class="brand-name">Sndr</span> © 2025 by NS ACT
+            </div>
+            <div class="tagline">Send anonymous messages to anyone, anytime</div>
+        </div>
+    </footer>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    // Auto-dismiss flash messages after 5 seconds
+    document.addEventListener('DOMContentLoaded', function() {
+        const alerts = document.querySelectorAll('.alert');
+        alerts.forEach(alert => {
+            setTimeout(() => {
+                const bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            }, 5000);
+        });
+    });
+    </script>
+    
+    <!-- PWA Installation Script - Still registering the service worker for offline capability -->
+    <script>
+        // Register Service Worker for PWA
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/pwa-service-worker.js')
+                .then(reg => {
+                    console.log('Service worker registered: ', reg);
+                })
+                .catch(err => {
+                    console.log('Service worker registration failed: ', err);
+                });
+            });
+        }
+    </script>
+    
+    {% if current_user.is_authenticated %}
+    <!-- Try the main notification system, but fallback to polling if permissions are denied -->
+    <script src="{{ url_for('static', filename='js/notifications.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/notifications-fallback.js') }}"></script>
+    {% endif %}
+    {% block scripts %}{% endblock %}
+</body>
+</html> 

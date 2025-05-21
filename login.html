@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Login - Sndr{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+            <div class="card auth-card shadow">
+                <div class="card-body p-4 p-md-5">
+                    <div class="auth-header text-center">
+                        <i class="fas fa-user-circle fa-3x"></i>
+                        <h2 class="display-6 fw-bold">Welcome Back</h2>
+                        <p class="text-muted">Sign in to access your messages</p>
+                    </div>
+                    
+                    <form method="post" class="auth-form">
+                        <div class="form-floating mb-4">
+                            <input type="text" class="form-control form-control-lg" id="username" name="username" 
+                                   placeholder="Username" required value="{{ username if username else '' }}">
+                            <label for="username"><i class="fas fa-user me-2"></i>Username</label>
+                        </div>
+                        
+                        <div class="form-floating mb-4">
+                            <input type="password" class="form-control form-control-lg" id="password" name="password" 
+                                   placeholder="Password" required>
+                            <label for="password"><i class="fas fa-lock me-2"></i>Password</label>
+                        </div>
+                        
+                        <div class="form-check mb-4">
+                            <input class="form-check-input" type="checkbox" value="" id="remember" name="remember">
+                            <label class="form-check-label" for="remember">
+                                Remember me
+                            </label>
+                            <a href="{{ url_for('forgot_password') }}" class="float-end">Forgot password?</a>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary btn-lg w-100 mb-3">
+                            <i class="fas fa-sign-in-alt me-2"></i>Login
+                        </button>
+                        
+                        <div class="auth-links text-center">
+                            Don't have an account? <a href="{{ url_for('register') }}">Register</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

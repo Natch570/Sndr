@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}Redirecting to Instagram{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white text-center">
+                    <h3><i class="fab fa-instagram me-2"></i>Opening Instagram</h3>
+                </div>
+                <div class="card-body">
+                    <div class="text-center mb-4">
+                        <p class="lead">You'll be redirected to Instagram in a moment.</p>
+                        <div class="spinner-border text-primary my-3" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-info">
+                        <p><strong>Copy this message text:</strong></p>
+                        <div class="p-3 bg-light rounded border mb-3">
+                            <div class="message-to-copy">{{ message }}</div>
+                        </div>
+                        <button class="btn btn-sm btn-outline-primary" onclick="copyMessage()">
+                            <i class="fas fa-copy me-1"></i>Copy Text
+                        </button>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <p><small class="text-muted">If you're not redirected automatically, please <a href="{{ instagram_url }}" class="manual-redirect">click here</a> to open Instagram.</small></p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-4">
+                <a href="{{ url_for('inbox', username=current_user.username) }}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left me-1"></i>Back to Inbox
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Attempt to redirect to Instagram after a short delay
+        setTimeout(function() {
+            window.location.href = '{{ instagram_url }}';
+        }, 1500);
+    });
+    
+    function copyMessage() {
+        const messageText = document.querySelector('.message-to-copy').innerText;
+        navigator.clipboard.writeText(messageText).then(function() {
+            const button = document.querySelector('.btn-outline-primary');
+            button.innerHTML = '<i class="fas fa-check me-1"></i>Copied!';
+            button.classList.remove('btn-outline-primary');
+            button.classList.add('btn-success');
+            
+            setTimeout(function() {
+                button.innerHTML = '<i class="fas fa-copy me-1"></i>Copy Text';
+                button.classList.remove('btn-success');
+                button.classList.add('btn-outline-primary');
+            }, 2000);
+        }).catch(function(err) {
+            console.error('Could not copy text: ', err);
+            alert('Failed to copy. Please select and copy the text manually.');
+        });
+    }
+</script>
+{% endblock %} 
